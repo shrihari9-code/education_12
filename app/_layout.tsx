@@ -59,10 +59,10 @@ function RootLayoutNav() {
     <PaperProvider theme={theme}>
       <Stack
         screenOptions={{
-          // headerShown: false,
-          headerStyle: {
-            backgroundColor: "#145AAC",
-          },
+          headerShown: false,
+          // headerStyle: {
+          //   backgroundColor: "#145AAC",
+          // },
         }}
       />
     </PaperProvider>

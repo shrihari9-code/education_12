@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,18 @@ import {
   NativeSyntheticEvent,
   TextInputChangeEventData,
   Pressable,
-  ScrollView,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import EntypoIcon from "react-native-vector-icons/Entypo";
-import Sidebar from "../components/Sidebar";
+import Sidebar from "../../components/Sidebar";
 import { Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
-import LectureCard from "../components/LectureCard";
+import LectureCard from "../../components/LectureCard";
+import { Link } from "expo-router";
 
 type Props = {};
 
 const Teacher = ({}: Props) => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [searchVal, setSearchVal] = useState("");
 
   const handleSearchField = (
@@ -28,21 +27,8 @@ const Teacher = ({}: Props) => {
     setSearchVal(e.nativeEvent.text);
   };
 
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (
     <View style={styles.container}>
-      {/* <View>
-        <View style={styles.header}>
-          <TouchableOpacity onPress={toggleMenu}>
-            <Ionicons name="menu" size={30} color="white" />
-          </TouchableOpacity>
-          <Text style={styles.logoText}>Logo</Text>
-        </View>
-      </View> */}
-
       <Searchbar
         style={styles.searchBar}
         value={searchVal}
@@ -70,12 +56,10 @@ const Teacher = ({}: Props) => {
           <Ionicons name="settings-sharp" size={30} color="white" />
         </Pressable>
 
-        <Pressable>
+        <Link href="/settings">
           <Ionicons name="settings-sharp" size={30} color="white" />
-        </Pressable>
+        </Link>
       </View>
-
-      {isMenuOpen && <Sidebar toggleSidebar={toggleMenu} />}
     </View>
   );
 };
@@ -86,19 +70,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
-  header: {
-    backgroundColor: "#145AAC",
-    padding: 35,
-    paddingTop: 67,
-    // borderBottomLeftRadius: 10,
-    // borderBottomRightRadius: 10,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  logoText: {
-    alignSelf: "flex-end",
-    color: "white",
-  },
+
   sidebar: {
     backgroundColor: "#145AAC",
     padding: 35,
