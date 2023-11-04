@@ -19,7 +19,7 @@ const routes = [
   },
   {
     title: "+ Add Notes",
-    link: "",
+    link: "/teacher/add-notes",
   },
   {
     title: "+ Start Test",
