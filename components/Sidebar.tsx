@@ -1,14 +1,39 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import { Link, router } from "expo-router";
 
 type Props = {
   toggleSidebar: () => void;
 };
 
+const routes = [
+  {
+    title: "+ Add Lecture",
+    link: "/teacher/lectures/new",
+  },
+  {
+    title: "+ Add Students",
+    link: "/teacher/add-student",
+  },
+  {
+    title: "+ Add Notes",
+    link: "",
+  },
+  {
+    title: "+ Start Test",
+    link: "",
+  },
+];
+
 const Sidebar = ({ toggleSidebar }: Props) => {
-  const handleNavigation = () => {};
+  const handleNavigation = (link: any) => {
+    if (link === "") return;
+
+    router.replace(link);
+    toggleSidebar();
+  };
 
   return (
     <View style={styles.sidebar}>
@@ -16,21 +41,20 @@ const Sidebar = ({ toggleSidebar }: Props) => {
         <Ionicons name="close" size={30} color="white" />
       </TouchableOpacity>
 
-      <View style={styles.sidebarItemContainer}>
-        <TouchableOpacity style={styles.sidebarItem} onPress={handleNavigation}>
-          <Text>+ Add Lecture</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={handleNavigation}>
-          <Text>+ Add Students</Text>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.sidebarItem} onPress={handleNavigation}>
-          <Text>+ Add Notes</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.sidebarItem} onPress={handleNavigation}>
-          <Text>+ Start Test</Text>
-        </TouchableOpacity>
-      </View>
+      <FlatList
+        data={routes}
+        style={styles.sidebarItemContainer}
+        renderItem={({ item }) => (
+          <TouchableOpacity
+            onPress={() => handleNavigation(item.link)}
+            style={styles.sidebarItem}
+          >
+            <Text>{item.title}</Text>
+          </TouchableOpacity>
+        )}
+        keyExtractor={(item) => `${item.link}-${Math.random() * 190}`}
+        ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+      />
 
       <View style={styles.sidebarActions}>
         <TouchableOpacity style={styles.sidebarItem}>
