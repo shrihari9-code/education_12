@@ -33,7 +33,10 @@
     "react-native-screens": "~3.22.0",
     "react-native-vector-icons": "^10.0.1",
     "react-native-web": "~0.19.6",
-    "@shopify/flash-list": "1.4.3"
+    "@shopify/flash-list": "1.4.3",
+    "expo-av": "~13.4.1",
+    "expo-file-system": "~15.4.4",
+    "expo-document-picker": "~11.5.4"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
