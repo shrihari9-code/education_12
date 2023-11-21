@@ -22,7 +22,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.raypot.educatorapp"
     },
     "web": {
       "bundler": "metro",
@@ -40,6 +41,15 @@
     ],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {
+        "origin": false
+      },
+      "eas": {
+        "projectId": "90152617-1a46-46f6-9f2c-80f59728c2e2"
+      }
+    },
+    "owner": "raypot"
   }
 }

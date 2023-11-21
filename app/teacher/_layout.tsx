@@ -5,6 +5,8 @@ import Header from "../../components/Header";
 import Sidebar from "../../components/Sidebar";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import EntypoIcon from "react-native-vector-icons/Entypo";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import OctiIcon from "react-native-vector-icons/Octicons";
 
 type Props = {};
 
@@ -25,15 +27,15 @@ const Layout = (props: Props) => {
           <EntypoIcon name="home" size={30} color="white" />
         </Link>
 
-        <Pressable>
-          <Ionicons name="settings-sharp" size={30} color="white" />
-        </Pressable>
+        <Link href="/teacher/notes">
+          <MaterialIcon name="notes" size={30} color="white" />
+        </Link>
 
         <Pressable>
-          <Ionicons name="settings-sharp" size={30} color="white" />
+          <OctiIcon name="pencil" size={25} color="white" />
         </Pressable>
 
-        <Link href="/settings">
+        <Link href="/teacher/settings">
           <Ionicons name="settings-sharp" size={30} color="white" />
         </Link>
       </View>
@@ -51,6 +53,7 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+    alignItems: "center",
     padding: 20,
   },
 });

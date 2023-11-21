@@ -1,25 +1,33 @@
-import { FlatList, Pressable, StyleSheet, Text, View } from "react-native";
+import {
+  FlatList,
+  Pressable,
+  StyleSheet,
+  Text,
+  View,
+  ToastAndroid,
+} from "react-native";
 import React from "react";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import { Link, router } from "expo-router";
+import { router } from "expo-router";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 type Props = {
   toggleSidebar: () => void;
 };
 
 const routes = [
-  {
-    title: "+ Add Lecture",
-    link: "/teacher/lectures/new",
-  },
+  // {
+  //   title: "+ Add Lecture",
+  //   link: "/teacher/lectures/new",
+  // },
   {
     title: "+ Add Students",
     link: "/teacher/add-student",
   },
   {
     title: "+ Add Notes",
-    link: "/teacher/add-notes",
+    link: "/teacher/notes/add",
   },
   {
     title: "+ Start Test",
@@ -33,6 +41,16 @@ const Sidebar = ({ toggleSidebar }: Props) => {
 
     router.replace(link);
     toggleSidebar();
+  };
+
+  const handleLogout = async () => {
+    try {
+      await AsyncStorage.removeItem("authToken");
+      router.replace("/");
+    } catch (error: unknown) {
+      console.log(error);
+      ToastAndroid.show("Logout Operation failed", ToastAndroid.SHORT);
+    }
   };
 
   return (
@@ -61,7 +79,7 @@ const Sidebar = ({ toggleSidebar }: Props) => {
           <Text> & My Students</Text>
         </TouchableOpacity>
 
-        <TouchableOpacity style={styles.signOutButton}>
+        <TouchableOpacity style={styles.signOutButton} onPress={handleLogout}>
           <Text> Sign Out </Text>
         </TouchableOpacity>
       </View>

@@ -1,5 +1,8 @@
 import { StyleSheet, Text, TextInput, View, Pressable } from "react-native";
 import React, { useReducer } from "react";
+import { showToast } from "../../helpers/toast-helper";
+import { addStudent } from "../../services/auth";
+import { router } from "expo-router";
 
 type Props = {};
 
@@ -15,13 +18,13 @@ interface CredentialAction {
 }
 
 interface CredentialType {
-  userName: string;
+  email: string;
   password: string;
   confirmPassword: string;
 }
 
 const initialState: CredentialType = {
-  userName: "",
+  email: "",
   password: "",
   confirmPassword: "",
 };
@@ -33,7 +36,7 @@ const reducer = (state: CredentialType, action: CredentialAction) => {
     case Actions.UPDATE_USERNAME:
       return {
         ...state,
-        userName: payload,
+        email: payload,
       };
 
     case Actions.UPDATE_PASSSWORD:
@@ -63,15 +66,40 @@ const AddStudent = ({}: Props) => {
     });
   };
 
-  const handleSubmit = () => {};
+  const handleSubmit = async () => {
+    try {
+      if (credentials.password !== credentials.confirmPassword) {
+        showToast("Passwords do not match");
+        return;
+      }
+
+      if (credentials.password.length < 5) {
+        showToast("Enter a valid password with atleast six characters");
+        return;
+      }
+
+      const { data } = await addStudent(
+        credentials.email,
+        credentials.password
+      );
+
+      if (!data.success) throw new Error("Failed to create student");
+
+      showToast("Successfully added student");
+      router.push("/teacher/lectures");
+    } catch (error: unknown) {
+      console.log(error);
+      showToast("Error in creating student");
+    }
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.form}>
         <TextInput
           style={styles.textInput}
-          placeholder="User Name"
-          value={credentials.userName}
+          placeholder="Email"
+          value={credentials.email}
           onChangeText={(text) => handleInput(Actions.UPDATE_USERNAME, text)}
         />
         <TextInput
@@ -79,6 +107,7 @@ const AddStudent = ({}: Props) => {
           placeholder="Password"
           value={credentials.password}
           onChangeText={(text) => handleInput(Actions.UPDATE_PASSSWORD, text)}
+          textContentType="password"
         />
         <TextInput
           style={styles.textInput}
@@ -87,6 +116,7 @@ const AddStudent = ({}: Props) => {
           onChangeText={(text) =>
             handleInput(Actions.UPDATE_CONFIRM_PASSWORD, text)
           }
+          textContentType="password"
         />
 
         <Pressable style={styles.submitBtn} onPress={handleSubmit}>

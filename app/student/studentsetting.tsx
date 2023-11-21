@@ -1,7 +1,7 @@
 import { Image, Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import Header from "../components/Header";
-import SettingOptionItem from "../components/SettingOptionItem";
+import Header from "../../components/Header";
+import SettingOptionItem from "../../components/SettingOptionItem";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 

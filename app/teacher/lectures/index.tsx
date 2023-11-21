@@ -1,33 +1,15 @@
-import React, { useState, useEffect } from "react";
-import {
-  View,
-  StyleSheet,
-  NativeSyntheticEvent,
-  TextInputChangeEventData,
-  Text,
-  FlatList,
-} from "react-native";
-import Ionicons from "react-native-vector-icons/Ionicons";
-import EntypoIcon from "react-native-vector-icons/Entypo";
-import Sidebar from "../../components/Sidebar";
-import { Searchbar } from "react-native-paper";
-import { FlashList } from "@shopify/flash-list";
-import LectureCard from "../../components/LectureCard";
+import { StyleSheet, Text, View } from "react-native";
+import React, { useEffect, useState, useMemo } from "react";
+import { FlatList } from "react-native";
+import LectureCard from "../../../components/LectureCard";
+import { showToast } from "../../../helpers/toast-helper";
+import { fetchLectures } from "../../../services/lecture";
 import { Link } from "expo-router";
-import { fetchLectures } from "../../services/lecture";
-import { showToast } from "../../helpers/toast-helper";
 
 type Props = {};
 
-const Page = ({}: Props) => {
-  const [searchVal, setSearchVal] = useState("");
+const Lectures = ({}: Props) => {
   const [lectures, setLectures] = useState<LectureDetails[]>([]);
-
-  const handleSearchField = (
-    e: NativeSyntheticEvent<TextInputChangeEventData>
-  ) => {
-    setSearchVal(e.nativeEvent.text);
-  };
 
   const handleFetchLectures = async () => {
     try {
@@ -48,12 +30,6 @@ const Page = ({}: Props) => {
 
   return (
     <View style={styles.container}>
-      <Searchbar
-        style={styles.searchBar}
-        value={searchVal}
-        onChange={handleSearchField}
-      />
-
       <View style={styles.lecturesContainer}>
         <Text style={styles.lectureHeading}>My Lectures</Text>
         <FlatList
@@ -70,32 +46,16 @@ const Page = ({}: Props) => {
   );
 };
 
-export default Page;
+export default Lectures;
 
 const styles = StyleSheet.create({
   container: {
+    padding: 20,
     flex: 1,
-  },
-
-  sidebar: {
-    backgroundColor: "#145AAC",
-    padding: 35,
-    borderTopLeftRadius: 10,
-    borderTopRightRadius: 10,
-    position: "absolute",
-    width: "100%",
-    top: 0,
-    bottom: 0,
-    zIndex: 1,
-  },
-
-  searchBar: {
-    margin: 10,
   },
 
   lecturesContainer: {
     marginVertical: 25,
-    marginHorizontal: 15,
   },
 
   lectureHeading: {

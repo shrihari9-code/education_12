@@ -1,5 +1,11 @@
-import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
-import React from "react";
+import {
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+  TouchableOpacityProps,
+} from "react-native";
+import React, { ForwardedRef } from "react";
 import EntypoIcon from "react-native-vector-icons/Entypo";
 import AntDesignIcon from "react-native-vector-icons/AntDesign";
 import FeatherIcon from "react-native-vector-icons/Feather";
@@ -7,6 +13,7 @@ import FontAwesome5Icon from "react-native-vector-icons/FontAwesome5";
 import EvilIcon from "react-native-vector-icons/EvilIcons";
 import MaterialIcon from "react-native-vector-icons/MaterialIcons";
 import IonIcon from "react-native-vector-icons/Ionicons";
+import { LinkProps } from "expo-router";
 
 type IconType = {
   type: string;
@@ -19,7 +26,8 @@ type Props = {
   title: string;
   type: string;
   iconColor?: string;
-};
+} & LinkProps<any> &
+  Readonly<TouchableOpacityProps>;
 
 function Icon({ type, name, color }: IconType) {
   const size = 25;
@@ -49,18 +57,23 @@ function Icon({ type, name, color }: IconType) {
   }
 }
 
-const SettingOptionItem = ({ title, iconName, type, iconColor }: Props) => {
-  return (
-    <TouchableOpacity style={styles.optionItem}>
-      <View style={styles.iconBackground}>
-        <Icon name={iconName} type={type} color={iconColor} />
-      </View>
-      <Text style={styles.optionTitle}>{title}</Text>
+const SettingOptionItem = React.forwardRef(
+  (
+    { title, iconName, type, iconColor, ...props }: Props,
+    ref: ForwardedRef<TouchableOpacity>
+  ) => {
+    return (
+      <TouchableOpacity style={styles.optionItem} {...props} ref={ref}>
+        <View style={styles.iconBackground}>
+          <Icon name={iconName} type={type} color={iconColor} />
+        </View>
+        <Text style={styles.optionTitle}>{title}</Text>
 
-      <Icon name="chevron-forward-sharp" type="ion-icon" color="#B0B3C3" />
-    </TouchableOpacity>
-  );
-};
+        <Icon name="chevron-forward-sharp" type="ion-icon" color="#B0B3C3" />
+      </TouchableOpacity>
+    );
+  }
+);
 
 export default SettingOptionItem;
 
