@@ -4,7 +4,6 @@ import { FlatList } from "react-native";
 import LectureCard from "../../../components/LectureCard";
 import { showToast } from "../../../helpers/toast-helper";
 import { fetchLectures } from "../../../services/lecture";
-import { Link } from "expo-router";
 
 type Props = {};
 
@@ -16,7 +15,7 @@ const Lectures = ({}: Props) => {
       const { data } = await fetchLectures();
 
       const lectureDetailsArr = data.content;
-      console.log(lectureDetailsArr);
+      // console.log(lectureDetailsArr);
       setLectures(lectureDetailsArr);
     } catch (err) {
       console.log(err);
@@ -36,7 +35,11 @@ const Lectures = ({}: Props) => {
           style={styles.lectureList}
           data={lectures}
           renderItem={({ item }) => (
-            <LectureCard lectureId={item._id} title={item.title} />
+            <LectureCard
+              lectureId={item._id}
+              title={item.title}
+              videoUrl={item.videoUrl}
+            />
           )}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           keyExtractor={(item) => item._id}

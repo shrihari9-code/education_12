@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   StyleSheet,
@@ -11,22 +11,37 @@ import EntypoIcon from "react-native-vector-icons/Entypo";
 import { Searchbar } from "react-native-paper";
 import { FlashList } from "@shopify/flash-list";
 import LectureCard from "../../components/LectureCard";
-import { Link, Slot } from "expo-router";
-import Header from "../../components/Header";
-import Sidebar from "../../components/Sidebar";
-import Sidebarforstudents from "../../components/sidebarforstudents";
-
+import { fetchStudentLectures } from "../../services/lecture";
+import { showToast } from "../../helpers/toast-helper";
+import { FlatList } from "react-native-gesture-handler";
 
 type Props = {};
 
 const Student = ({}: Props) => {
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
   const [searchVal, setSearchVal] = useState("");
+  const [lectures, setLectures] = useState<LectureDetails[]>([]);
+
+  const handleFetchLectures = async () => {
+    try {
+      const { data } = await fetchStudentLectures();
+
+      const lectureDetailsArr = data.content;
+      // console.log(lectureDetailsArr);
+      setLectures(lectureDetailsArr);
+    } catch (err) {
+      console.log(err);
+      showToast("Error fetching lecture details");
+    }
+  };
+
+  useEffect(() => {
+    handleFetchLectures();
+  }, []);
 
   const handleSearchField = (
     e: NativeSyntheticEvent<TextInputChangeEventData>
@@ -36,8 +51,6 @@ const Student = ({}: Props) => {
 
   return (
     <View style={styles.container}>
-      <Slot />
-      {isMenuOpen && <Sidebarforstudents toggleSidebar={toggleMenu} />}
       <Searchbar
         style={styles.searchBar}
         value={searchVal}
@@ -45,29 +58,19 @@ const Student = ({}: Props) => {
       />
 
       <View style={styles.lectureCardsContainer}>
-        <FlashList
-          data={new Array(5)}
-          renderItem={() => <LectureCard />}
-          estimatedItemSize={15}
+        <FlatList
+          style={styles.lectureList}
+          data={lectures}
+          renderItem={({ item }) => (
+            <LectureCard
+              lectureId={item._id}
+              title={item.title}
+              videoUrl={item.videoUrl}
+            />
+          )}
+          ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
+          keyExtractor={(item) => item._id}
         />
-      </View>
-
-      <View style={styles.bottomTab}>
-        <Pressable>
-          <EntypoIcon name="home" size={30} color="white" />
-        </Pressable>
-
-        <Link href="/ranking">
-          <Ionicons name="bar-chart" size={30} color="white" />
-        </Link>
-
-        <Link href ='/testscreen'>
-          <Ionicons name="analytics" size={30} color="white" />
-        </Link>
-
-        <Link href="/studentsetting">
-          <Ionicons name="settings-sharp" size={30} color="white" />
-        </Link>
       </View>
     </View>
   );
@@ -78,6 +81,7 @@ export default Student;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    padding: 20,
   },
 
   sidebar: {
@@ -93,11 +97,15 @@ const styles = StyleSheet.create({
   },
 
   searchBar: {
-    margin: 10,
+    marginVertical: 10,
   },
 
   lectureCardsContainer: {
     height: "100%",
+  },
+
+  lectureList: {
+    marginVertical: 10,
   },
 
   bottomTab: {

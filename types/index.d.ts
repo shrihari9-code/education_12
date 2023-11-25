@@ -29,10 +29,36 @@ type Lecture = {
   teacherId: string;
 };
 
-type LectureDetails = Pick<Lecture, "title" | "_id">;
+type LectureDetails = Omit<Lecture, "teacherId">;
 
 type ServerResponse = {
   success: boolean;
   content: any;
   message: string;
+};
+
+type Question = {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+};
+
+type SelectedAnswers = {
+  [questionIndex: number]: string;
+};
+
+type Test = {
+  testId: string;
+  title: string;
+  startTimestamp: Date;
+  endTimestamp: Date;
+  teacherId: string;
+  maxMarks: number;
+  questionsCount: number;
+};
+
+type TestQuestion = {
+  keyAnswer: string;
+  options: string[];
+  title: string;
 };

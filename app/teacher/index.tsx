@@ -6,6 +6,7 @@ import {
   TextInputChangeEventData,
   Text,
   FlatList,
+  TextInputEndEditingEventData,
 } from "react-native";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import EntypoIcon from "react-native-vector-icons/Entypo";
@@ -29,12 +30,25 @@ const Page = ({}: Props) => {
     setSearchVal(e.nativeEvent.text);
   };
 
+  // const filterLectures = (
+  //   event: NativeSyntheticEvent<TextInputEndEditingEventData>
+  // ) => {
+  //   const searchText = event.nativeEvent.text;
+  //   console.log(searchText);
+
+  //   setLectures((lectures) =>
+  //     lectures.filter((lecture) => {
+  //       return lecture.title.includes(searchText);
+  //     })
+  //   );
+  // };
+
   const handleFetchLectures = async () => {
     try {
       const { data } = await fetchLectures();
 
       const lectureDetailsArr = data.content;
-      console.log(lectureDetailsArr);
+      // console.log(lectureDetailsArr);
       setLectures(lectureDetailsArr);
     } catch (err) {
       console.log(err);
@@ -52,6 +66,7 @@ const Page = ({}: Props) => {
         style={styles.searchBar}
         value={searchVal}
         onChange={handleSearchField}
+        // onEndEditing={filterLectures}
       />
 
       <View style={styles.lecturesContainer}>
@@ -60,7 +75,11 @@ const Page = ({}: Props) => {
           style={styles.lectureList}
           data={lectures}
           renderItem={({ item }) => (
-            <LectureCard lectureId={item._id} title={item.title} />
+            <LectureCard
+              lectureId={item._id}
+              title={item.title}
+              videoUrl={item.videoUrl}
+            />
           )}
           ItemSeparatorComponent={() => <View style={{ height: 20 }} />}
           keyExtractor={(item) => item._id}

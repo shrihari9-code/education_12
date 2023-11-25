@@ -39,6 +39,7 @@ const Login = (props: Props) => {
 
       ToastAndroid.show(data.message, ToastAndroid.SHORT);
       await AsyncStorage.setItem("authToken", authToken);
+      await AsyncStorage.setItem("role", role);
 
       router.replace(`/${role}`);
     } catch (error) {
@@ -52,7 +53,9 @@ const Login = (props: Props) => {
       const authToken = await AsyncStorage.getItem("authToken");
       if (authToken === null) return;
 
-      router.replace("/teacher/lectures");
+      const role = await AsyncStorage.getItem("role");
+      if (role === null) return;
+      router.replace(`/${role}`);
     } catch (error) {
       console.log(error);
     }

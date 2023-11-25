@@ -11,7 +11,7 @@ type Props = {
 const routes = [
   {
     title: "+ View Notes",
-    link: "",
+    link: "/student/notes",
   },
   {
     title: "+ View Videos",
@@ -53,7 +53,6 @@ const Sidebarforstudents = ({ toggleSidebar }: Props) => {
       />
 
       <View style={styles.sidebarActions}>
-
         <TouchableOpacity style={styles.signOutButton}>
           <Text> Sign Out </Text>
         </TouchableOpacity>

@@ -10,8 +10,6 @@ type Props = {};
 const Settings = ({}: Props) => {
   return (
     <View style={styles.container}>
-      <Header />
-
       <View style={styles.imageContainer}>
         <Image
           source={{

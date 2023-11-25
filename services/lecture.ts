@@ -9,7 +9,7 @@ export async function fetchLectures() {
 }
 
 export async function fetchStudentLectures() {
-  return httpClient.get("/lectures/student");
+  return httpClient.get("/lectures/students");
 }
 
 export async function fetchLectureVideo(lectureId: string) {

@@ -21,19 +21,19 @@ const Layout = (props: Props) => {
       {isMenuOpen && <Sidebarforstudents toggleSidebar={toggleMenu} />}
 
       <View style={styles.bottomTab}>
-      <Pressable>
+        <Link href="/student">
           <EntypoIcon name="home" size={30} color="white" />
-        </Pressable>
+        </Link>
 
-        <Link href="/ranking">
+        <Link href="/student/ranking">
           <Ionicons name="bar-chart" size={30} color="white" />
         </Link>
 
-        <Link href ='/testscreen'>
+        <Link href="/student/tests">
           <Ionicons name="analytics" size={30} color="white" />
         </Link>
 
-        <Link href="/studentsetting">
+        <Link href="/student/settings">
           <Ionicons name="settings-sharp" size={30} color="white" />
         </Link>
       </View>

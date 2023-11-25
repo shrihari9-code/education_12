@@ -1,18 +1,36 @@
-import { StyleSheet, Text, View, Pressable, Image } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  Pressable,
+  Image,
+  Linking,
+} from "react-native";
 import React from "react";
 import { Link, router } from "expo-router";
+import { showToast } from "../helpers/toast-helper";
 
 type Props = {
   lectureId: string;
   title: string;
+  videoUrl: string;
 };
 
-const LectureCard = ({ lectureId, title }: Props) => {
-  const handleLectureVideoNavigation = () => {
+const LectureCard = ({ lectureId, title, videoUrl }: Props) => {
+  const handleLectureVideoNavigation = async () => {
     router.setParams({
       lectureId,
     });
-    router.push(`/teacher/lectures/${lectureId}`);
+    // router.push(`/teacher/lectures/${lectureId}`);
+
+    try {
+      const isUrlValid = await Linking.canOpenURL(videoUrl);
+      if (!isUrlValid) throw new Error("Invalid video url");
+
+      await Linking.openURL(videoUrl);
+    } catch (error: any) {
+      showToast(error?.message ?? "Failed to open the lecture");
+    }
   };
   return (
     <Pressable
