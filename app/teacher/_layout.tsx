@@ -31,9 +31,9 @@ const Layout = (props: Props) => {
           <MaterialIcon name="notes" size={30} color="white" />
         </Link>
 
-        <Pressable>
+        <Link href="/teacher/tests">
           <OctiIcon name="pencil" size={25} color="white" />
-        </Pressable>
+        </Link>
 
         <Link href="/teacher/settings">
           <Ionicons name="settings-sharp" size={30} color="white" />

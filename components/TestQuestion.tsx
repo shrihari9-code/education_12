@@ -1,17 +1,13 @@
-import { useState, useCallback, memo, useMemo } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  StyleSheet,
-  TouchableOpacity,
-} from "react-native";
+import { memo } from "react";
+import { View, Text, FlatList, StyleSheet } from "react-native";
 import OptionItem from "./OptionItem";
 
 type Props = Question & {
   index: number;
-  optionPressHandler(questionIndex: number, option: string): void;
-  selectedAnswers: SelectedAnswers;
+  optionPressHandler(questionId: string, selectedOption: number): void;
+  selectedAnswers: SelectedAnswer[];
+  questionId: string;
+  questionIndex: number;
 };
 
 function TestQuestion({
@@ -21,6 +17,8 @@ function TestQuestion({
   index,
   optionPressHandler,
   selectedAnswers,
+  questionId,
+  questionIndex,
 }: Props) {
   return (
     <View style={styles.questionContainer}>
@@ -33,9 +31,11 @@ function TestQuestion({
         renderItem={({ item, index }) => (
           <OptionItem
             option={item}
+            questionId={questionId}
             optionPressHandler={optionPressHandler}
-            questionIndex={index}
+            questionIndex={questionIndex}
             selectedAnswers={selectedAnswers}
+            optionIndex={index}
           />
         )}
       />

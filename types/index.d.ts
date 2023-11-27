@@ -43,22 +43,41 @@ type Question = {
   correctAnswer: string;
 };
 
-type SelectedAnswers = {
-  [questionIndex: number]: string;
+type SelectedAnswer = {
+  questionId: string;
+  selectedOption: number;
 };
 
 type Test = {
   testId: string;
   title: string;
-  startTimestamp: Date;
-  endTimestamp: Date;
+  startTimestamp: Date | null;
+  endTimestamp: Date | null;
   teacherId: string;
   maxMarks: number;
   questionsCount: number;
+  studentCount: number;
 };
 
 type TestQuestion = {
   keyAnswer: string;
   options: string[];
   title: string;
+  questionId: string;
+};
+
+type Ranking = {
+  userScore: number;
+  maxScore: number;
+  rank: number;
+  testName: string;
+  studentId: string;
+};
+
+type TestStatistics = {
+  test: Test;
+  standings: Standing[];
+  highestScore: number;
+  lowestScore: number;
+  avgScore: number;
 };

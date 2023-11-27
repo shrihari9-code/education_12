@@ -66,8 +66,9 @@ const NotesCard = ({ name, type, uri }: Props) => {
           alt=""
         />
       )}
-      <Text>{name}</Text>
-      {/* <Text>{uri}</Text> */}
+      <Text numberOfLines={1} style={styles.notesTitle}>
+        {name}
+      </Text>
 
       <EntypoIcon name="dots-three-vertical" size={20} />
     </Pressable>
@@ -90,4 +91,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: 50,
   },
+
+  notesTitle: { maxWidth: "70%" },
 });

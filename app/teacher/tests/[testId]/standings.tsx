@@ -1,23 +1,32 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, FlatList, StyleSheet } from "react-native";
-import { fetchStudentRankings } from "../../services/test";
-import RankingItem from "../../components/RankingItem";
+import { fetchTestStandings } from "../../../../services/test";
+import RankingItem from "../../../../components/RankingItem";
+import { useLocalSearchParams } from "expo-router";
 
 const RankingScreen = () => {
-  const [studentRanks, setStudentRanks] = useState<Ranking[]>([]);
+  const [studentRanks, setStudentRanks] = useState<
+    Array<Ranking & { studentName: string }>
+  >([]);
+  const { testId }: { testId: string } = useLocalSearchParams();
 
-  const handleFetchRankings = async () => {
+  const handleFetchStandings = async () => {
     try {
-      const { data } = await fetchStudentRankings();
-      const rankings: Ranking[] = data.content;
-      setStudentRanks(rankings);
+      const { data } = await fetchTestStandings(testId);
+      const testInfo = data.content.test;
+      const standings: Array<Ranking & { studentName: string }> =
+        data.content.standings.map((standing: Omit<Ranking, "testName">) => ({
+          ...standing,
+          testName: testInfo.title,
+        }));
+      setStudentRanks(standings);
     } catch (err) {
       console.log(err);
     }
   };
 
   useEffect(() => {
-    handleFetchRankings();
+    handleFetchStandings();
   }, []);
 
   return (
@@ -29,7 +38,7 @@ const RankingScreen = () => {
         keyExtractor={(_item, index) => _item.studentId}
         contentContainerStyle={{ padding: 10 }}
         renderItem={({
-          item: { maxScore, rank, studentId, testName, userScore },
+          item: { maxScore, rank, studentId, testName, userScore, studentName },
           index,
         }) => (
           <RankingItem
@@ -37,7 +46,7 @@ const RankingScreen = () => {
             maxScore={maxScore}
             rank={rank}
             studentId={studentId}
-            testName={testName}
+            testName={studentName}
             userScore={userScore}
           />
         )}

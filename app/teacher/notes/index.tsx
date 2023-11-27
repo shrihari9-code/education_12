@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import { fetchNotes } from "../../../services/notes";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import NotesCard from "../../../components/NotesCard";
 
 type Props = {};
@@ -17,6 +17,10 @@ const Notes = ({}: Props) => {
       console.log(error);
     }
   };
+
+  useEffect(() => {
+    getNotes();
+  }, []);
 
   return (
     <View style={styles.container}>

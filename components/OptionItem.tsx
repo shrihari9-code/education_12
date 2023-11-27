@@ -3,26 +3,42 @@ import React, { memo } from "react";
 
 type Props = {
   option: string;
-  selectedAnswers: SelectedAnswers;
+  questionId: string;
+  selectedAnswers: SelectedAnswer[];
   questionIndex: number;
-  optionPressHandler(questionIndex: number, option: string): void;
+  optionPressHandler(questionId: string, selectedOption: number): void;
+  optionIndex: number;
 };
 
 function OptionItem({
   option,
   questionIndex,
   selectedAnswers,
+  questionId,
   optionPressHandler,
+  optionIndex,
 }: Props) {
   return (
     <TouchableOpacity
       style={[
         styles.option,
-        selectedAnswers[questionIndex] === option && styles.selectedOption,
+        selectedAnswers[questionIndex]?.questionId === questionId &&
+          selectedAnswers[questionIndex]?.selectedOption - 1 === optionIndex &&
+          styles.selectedOption,
       ]}
-      onPress={() => optionPressHandler(questionIndex, option)}
+      onPress={() => optionPressHandler(questionId, optionIndex + 1)}
     >
-      <Text style={styles.optionText}>{option}</Text>
+      <Text
+        style={[
+          styles.optionText,
+          selectedAnswers[questionIndex]?.questionId === questionId &&
+            selectedAnswers[questionIndex]?.selectedOption - 1 ===
+              optionIndex &&
+            styles.selectedOptionText,
+        ]}
+      >
+        {option}
+      </Text>
     </TouchableOpacity>
   );
 }
@@ -37,11 +53,17 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     marginBottom: 5,
   },
+
   selectedOption: {
     backgroundColor: "#145AAC",
     borderColor: "#145AAC",
   },
+
   optionText: {
     color: "#333",
+  },
+
+  selectedOptionText: {
+    color: "white",
   },
 });

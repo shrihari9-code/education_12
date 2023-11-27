@@ -6,36 +6,55 @@ import {
   StyleSheet,
   TouchableOpacity,
 } from "react-native";
-import TestQuestion from "../../../components/TestQuestion";
-import { showToast } from "../../../helpers/toast-helper";
-import { fetchTestQuestions } from "../../../services/test";
+import TestQuestion from "../../../../components/TestQuestion";
+import { showToast } from "../../../../helpers/toast-helper";
+import { fetchTestQuestions } from "../../../../services/test";
 import { router, useLocalSearchParams } from "expo-router";
 
-interface SelectedAnswers {
-  [questionIndex: number]: string;
-}
-
 const TestScreen = () => {
-  const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswers>({});
+  const [selectedAnswers, setSelectedAnswers] = useState<SelectedAnswer[]>([]);
   const [testQuestions, setTestQuestions] = useState<TestQuestion[]>([]);
 
   const { testId }: { testId: string } = useLocalSearchParams();
 
-  const handleOptionPress = (questionIndex: number, option: string) => {
-    setSelectedAnswers({
-      ...selectedAnswers,
-      [questionIndex]: option,
-    });
+  const handleOptionPress = (questionId: string, selectedOption: number) => {
+    const responsePresent = selectedAnswers.find(
+      (res) => res.questionId === questionId
+    );
+
+    if (responsePresent !== undefined) {
+      setSelectedAnswers(
+        selectedAnswers.map((answer) => {
+          return answer.questionId === questionId
+            ? { ...answer, selectedOption }
+            : answer;
+        })
+      );
+    } else {
+      setSelectedAnswers([...selectedAnswers, { questionId, selectedOption }]);
+    }
   };
 
   const handleFetchTestQuestions = async () => {
     try {
       const { data } = await fetchTestQuestions(testId);
-      const questions = data.content.questions;
+      const questions = data.content.questions.map((question: any) => ({
+        options: question.options,
+        title: question.title,
+        questionId: question._id,
+        keyAnswer: "",
+      }));
 
       setTestQuestions(questions);
     } catch (error: any) {
       showToast(error.message ?? "Failed to fetch test questions");
+    }
+  };
+
+  const handleSubmitResponse = async () => {
+    try {
+    } catch (error: any) {
+      showToast(error.message ?? "Failed to submit the test response");
     }
   };
 
@@ -72,12 +91,14 @@ const TestScreen = () => {
         initialNumToRender={10}
         renderItem={({ item, index }) => (
           <TestQuestion
+            questionId={item.questionId}
             correctAnswer={item.keyAnswer}
             index={index}
             optionPressHandler={handleOptionPress}
             options={item.options}
             question={item.title}
             selectedAnswers={selectedAnswers}
+            questionIndex={index}
           />
         )}
       />

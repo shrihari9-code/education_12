@@ -39,3 +39,7 @@ export async function submitTestResponse(testId: string, testResponse: any) {
 export async function fetchStudentRankings() {
   return httpClient.get("/tests/students/rankings");
 }
+
+export async function fetchTestStandings(testId: string) {
+  return httpClient.get(`/tests/${testId}/standings`);
+}

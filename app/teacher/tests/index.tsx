@@ -1,8 +1,9 @@
 import { StyleSheet, Text, View, FlatList } from "react-native";
 import TestItem from "../../../components/TestItem";
 import { showToast } from "../../../helpers/toast-helper";
-import { fetchStudentTests, fetchTests } from "../../../services/test";
+import { fetchTests } from "../../../services/test";
 import { useEffect, useState } from "react";
+import TestDisplayCard from "../../../components/TestDisplayCard";
 
 function TestHome() {
   const [tests, setTests] = useState<Test[]>([]);
@@ -11,15 +12,14 @@ function TestHome() {
     try {
       const { data } = await fetchTests();
       const testData = data.content;
-      // console.log(testData);
-      setTests([
-        {
-          testId: testData.test._id,
-          maxMarks: testData.maxMarks,
-          questionsCount: testData.questionsCount,
-          ...testData.test,
-        },
-      ]);
+      setTests(
+        testData.map((test: any) => ({
+          testId: test._id,
+          maxMarks: test.maxMarks,
+          questionsCount: test.questionsCount,
+          ...test,
+        }))
+      );
     } catch (error: any) {
       showToast(error?.message ?? "Failed to fetch student tests");
     }
@@ -41,12 +41,17 @@ function TestHome() {
           padding: 10,
         }}
         renderItem={({ item, index }) => (
-          <TestItem
-            testId={item.testId}
-            index={index}
-            marks={item.maxMarks}
-            questionsCount={item.questionsCount}
+          // <TestItem
+          //   testId={item.testId}
+          //   index={index}
+          //   marks={item.maxMarks}
+          //   questionsCount={0}
+          //   title={item.title}
+          // />
+          <TestDisplayCard
             title={item.title}
+            studentCount={item.studentCount}
+            testId={item.testId}
           />
         )}
       />

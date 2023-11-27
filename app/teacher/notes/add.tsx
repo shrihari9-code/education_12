@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import React, { useState, useEffect } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { FlatList } from "react-native";
@@ -8,7 +8,8 @@ import NotesCard from "../../../components/NotesCard";
 import { showToast } from "../../../helpers/toast-helper";
 import { Pressable } from "react-native";
 import * as FileSystem from "expo-file-system";
-import { fetchNotes } from "../../../services/notes";
+import { addNotes, fetchNotes } from "../../../services/notes";
+import { router } from "expo-router";
 
 type Props = {};
 
@@ -18,7 +19,7 @@ const AddNotes = ({}: Props) => {
 
   const [notes, setNotes] = useState<Omit<Notes, "teacherId">[]>([]);
 
-  const handleNotesUpload = async () => {
+  const handleNotes = async () => {
     try {
       const result = await DocumentPicker.getDocumentAsync({
         type: ALLOWED_NOTES_MIME_TYPES,
@@ -36,10 +37,33 @@ const AddNotes = ({}: Props) => {
       }
 
       const notesAsset = result.assets[0];
-      console.log(notesAsset.uri);
       setUploadedNotes(notesAsset);
     } catch (error) {
       console.error("Error selecting document:", error);
+    }
+  };
+
+  const uploadNotes = async () => {
+    try {
+      if (uploadedNotes === null)
+        throw new Error("No notes available to upload");
+
+      const formData = new FormData();
+      const file = {
+        name: uploadedNotes.name,
+        uri: uploadedNotes.uri,
+        type: uploadedNotes.mimeType,
+        size: uploadedNotes.size,
+      };
+
+      formData.append("notes", file as any);
+      formData.append("description", uploadedNotes.name);
+      const { data, status } = await addNotes(formData);
+      if (status === 201) {
+        router.push("/teacher/notes");
+      }
+    } catch (error: any) {
+      showToast(error?.message ?? "Error uploading notes");
     }
   };
 
@@ -58,7 +82,7 @@ const AddNotes = ({}: Props) => {
 
     return () => {
       if (uploadedNotes !== null) {
-        FileSystem.deleteAsync(uploadedNotes.uri);
+        FileSystem.deleteAsync(uploadedNotes.uri, { idempotent: true });
       }
     };
   }, []);
@@ -72,13 +96,17 @@ const AddNotes = ({}: Props) => {
           uri={uploadedNotes.uri}
         />
       ) : (
-        <Pressable style={styles.notesContainer} onPress={handleNotesUpload}>
+        <Pressable style={styles.notesContainer} onPress={handleNotes}>
           <View style={styles.notesDropZone}>
             <IonIcons name="cloud-upload-outline" size={40} />
-            <Text>Upload Notes</Text>
+            <Text>Drop notes here</Text>
           </View>
         </Pressable>
       )}
+
+      <TouchableOpacity style={styles.notesUploadButton} onPress={uploadNotes}>
+        <Text style={styles.notesUploadButtonText}>Upload</Text>
+      </TouchableOpacity>
 
       <View style={styles.lecturesContainer}>
         <Text style={styles.lectureHeading}>My Notes</Text>
@@ -113,6 +141,19 @@ const styles = StyleSheet.create({
   notesDropZone: {
     alignItems: "center",
     justifyContent: "center",
+  },
+
+  notesUploadButton: {
+    padding: 10,
+    borderRadius: 10,
+    backgroundColor: "#145AAC",
+    alignItems: "center",
+    marginTop: 10,
+  },
+
+  notesUploadButtonText: {
+    color: "white",
+    fontSize: 16,
   },
 
   lecturesContainer: {

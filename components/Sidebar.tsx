@@ -30,8 +30,8 @@ const routes = [
     link: "/teacher/notes/add",
   },
   {
-    title: "+ Start Test",
-    link: "",
+    title: "+ Create Test",
+    link: "/teacher/tests/create",
   },
 ];
 
@@ -75,7 +75,13 @@ const Sidebar = ({ toggleSidebar }: Props) => {
       />
 
       <View style={styles.sidebarActions}>
-        <TouchableOpacity style={styles.sidebarItem}>
+        <TouchableOpacity
+          style={styles.sidebarItem}
+          onPress={() => {
+            router.push("/teacher/students");
+            toggleSidebar();
+          }}
+        >
           <Text> & My Students</Text>
         </TouchableOpacity>
 

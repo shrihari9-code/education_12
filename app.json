@@ -48,7 +48,8 @@
       },
       "eas": {
         "projectId": "90152617-1a46-46f6-9f2c-80f59728c2e2"
-      }
+      },
+      "supportsRTL": true
     },
     "owner": "raypot"
   }

@@ -11,7 +11,6 @@ function TestHome() {
     try {
       const { data } = await fetchStudentTests();
       const testData = data.content;
-      // console.log(testData);
       setTests([
         {
           testId: testData.test._id,
