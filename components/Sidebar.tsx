@@ -17,10 +17,10 @@ type Props = {
 };
 
 const routes = [
-  // {
-  //   title: "+ Add Lecture",
-  //   link: "/teacher/lectures/new",
-  // },
+  {
+    title: "+ Add Lecture",
+    link: "/teacher/lectures/add",
+  },
   {
     title: "+ Add Students",
     link: "/teacher/add-student",

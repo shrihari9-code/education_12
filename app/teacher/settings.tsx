@@ -80,7 +80,7 @@ const Settings = ({}: Props) => {
           />
         </Link>
 
-        <Link href="/teacher/lectures" asChild replace>
+        <Link href="/teacher/tests" asChild replace>
           <SettingOptionItem
             type="material-icon"
             iconName="ondemand-video"

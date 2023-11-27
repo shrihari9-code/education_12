@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
 
   lectureList: {
     marginVertical: 10,
+    marginBottom: 80,
   },
   lectureItem: {
     height: 200,

@@ -12,9 +12,15 @@ type Props = {
   value: string;
   changeHandler(text: string): void;
   placeholder: string;
+  multiline?: boolean;
 };
 
-const InputField = ({ value, changeHandler, placeholder }: Props) => {
+const InputField = ({
+  value,
+  changeHandler,
+  placeholder,
+  multiline = false,
+}: Props) => {
   const [isFocused, setFocused] = useState(false);
 
   return (
@@ -26,6 +32,7 @@ const InputField = ({ value, changeHandler, placeholder }: Props) => {
       onFocus={(e) => setFocused(true)}
       onBlur={(e) => setFocused(false)}
       underlineColorAndroid={isFocused ? BLUE : LIGHT_GRAY}
+      multiline={multiline}
     />
   );
 };

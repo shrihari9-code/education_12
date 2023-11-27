@@ -44,7 +44,9 @@ const LectureCard = ({ lectureId, title, videoUrl }: Props) => {
         alt=""
         style={styles.lectureThumbnail}
       />
-      <Text style={styles.lectureTitle}>{title}</Text>
+      <Text style={styles.lectureTitle} numberOfLines={1}>
+        {title}
+      </Text>
     </Pressable>
   );
 };
@@ -59,7 +61,7 @@ const styles = StyleSheet.create({
   },
 
   lectureThumbnail: {
-    height: 180,
+    height: 150,
     objectFit: "cover",
   },
 
